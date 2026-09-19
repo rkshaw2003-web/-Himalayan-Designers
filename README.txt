@@ -1,18 +1,17 @@
-HIMALAYAN DESIGNER'S — CLIENT READY MULTI-PAGE WEBSITE
+HIMALAYAN DESIGNER'S — CLIENT READY V2
 
-Every HTML file is now SELF-CONTAINED:
-- CSS is embedded
-- JavaScript is embedded
-- Logo is embedded
-- Product photos are embedded
-- No missing styles/images when opening an individual HTML file
+Fixed:
+- Clean consistent sans-serif typography across the site
+- Header logo/name/subtitle alignment fixed
+- Separate pages for Home, Shop, Categories, Custom Order, About and Contact
+- Product cards now include Size selector
+- Product cards now include Finish selector
+- Quantity +/- selector before Add to Cart
+- Add to Cart opens working cart drawer
+- Cart shows selected size, finish and quantity
+- Cart quantity can be changed or item removed
+- Checkout modal is hidden by default and opens only when requested
+- All CSS, JS, logo and photos are embedded inside each HTML file
 
-Pages:
-1. index.html
-2. shop.html
-3. categories.html
-4. custom-order.html
-5. about.html
-6. contact.html
-
-For full navigation between pages, keep all six HTML files together in the same folder.
+Keep all six HTML files in the same folder for navigation.
+Start with index.html.
