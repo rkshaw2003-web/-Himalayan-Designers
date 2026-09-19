@@ -1,17 +1,14 @@
-HIMALAYAN DESIGNER'S — CLIENT READY V2
+HIMALAYAN DESIGNER'S — DIRECT ORDER V3
 
-Fixed:
-- Clean consistent sans-serif typography across the site
-- Header logo/name/subtitle alignment fixed
-- Separate pages for Home, Shop, Categories, Custom Order, About and Contact
-- Product cards now include Size selector
-- Product cards now include Finish selector
-- Quantity +/- selector before Add to Cart
-- Add to Cart opens working cart drawer
-- Cart shows selected size, finish and quantity
-- Cart quantity can be changed or item removed
-- Checkout modal is hidden by default and opens only when requested
-- All CSS, JS, logo and photos are embedded inside each HTML file
+Changes:
+- Removed "Place Demo Order"
+- Checkout button now says "Place Order"
+- Required delivery fields are validated
+- On order placement, a unique order ID is generated
+- Order details are saved locally in browser storage
+- Proper "Order Confirmed" screen is shown
+- No demo wording in checkout
 
-Keep all six HTML files in the same folder for navigation.
-Start with index.html.
+Important:
+This is still a static website. Orders are saved only in the customer's browser.
+For live real orders that reach the business, connect a backend / database / WhatsApp / email / payment gateway.

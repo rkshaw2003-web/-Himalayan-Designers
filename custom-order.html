@@ -170,6 +170,21 @@ footer a{display:block;margin:7px 0}
   .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.values{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}.footer-grid>div:last-child{grid-column:auto}.copyright{flex-direction:column}
 }
+
+.order-success{
+  text-align:center;padding:28px 10px 10px
+}
+.order-success-icon{
+  width:68px;height:68px;border-radius:50%;background:var(--green-soft);color:var(--green);
+  display:grid;place-items:center;margin:0 auto 18px;font-size:30px;font-weight:900
+}
+.order-success h2{margin-bottom:10px}
+.order-success p{max-width:460px;margin:0 auto 18px}
+.order-number{
+  display:inline-block;background:var(--warm);border:1px solid var(--line);border-radius:10px;
+  padding:10px 14px;font-size:13px;font-weight:800;color:var(--green-dark);margin-bottom:18px
+}
+
 </style></head>
 <body data-limit="0">
 <div class="topline"></div>
@@ -229,14 +244,14 @@ footer a{display:block;margin:7px 0}
   <div class="modal-box">
     <div class="modal-top"><div><div class="kicker">Checkout</div><h2>Delivery Details</h2></div><button type="button" class="close" onclick="closeCheckout()">×</button></div>
     <div class="form-grid">
-      <div class="field"><label>Full Name</label><input></div>
-      <div class="field"><label>Phone Number</label><input></div>
-      <div class="field"><label>Email</label><input></div>
-      <div class="field"><label>PIN Code</label><input></div>
-      <div class="field full"><label>Delivery Address</label><textarea></textarea></div>
+      <div class="field"><label>Full Name</label><input id="checkoutName" required placeholder="Your full name"></div>
+      <div class="field"><label>Phone Number</label><input id="checkoutPhone" required placeholder="+91 XXXXX XXXXX"></div>
+      <div class="field"><label>Email</label><input id="checkoutEmail" type="email" placeholder="Email address"></div>
+      <div class="field"><label>PIN Code</label><input id="checkoutPin" required placeholder="PIN Code"></div>
+      <div class="field full"><label>Delivery Address</label><textarea id="checkoutAddress" required placeholder="Full delivery address"></textarea></div>
     </div>
     <div class="payment"><strong>Payment Method</strong><br><br><label><input type="radio" name="pay" checked> UPI / Card / Net Banking</label>&nbsp;&nbsp;<label><input type="radio" name="pay"> Cash on Delivery</label></div>
-    <button type="button" class="btn btn-primary" style="width:100%;margin-top:14px" onclick="placeOrder()">Place Demo Order →</button>
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:14px" onclick="placeOrder()">Place Order →</button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -370,8 +385,54 @@ function openCheckout(){
 }
 function closeCheckout(){document.getElementById("checkoutModal").hidden=true}
 function placeOrder(){
-  cart=[];saveCart();updateCart();closeCheckout();showToast("Demo order placed successfully");
+  const name=document.getElementById("checkoutName")?.value.trim();
+  const phone=document.getElementById("checkoutPhone")?.value.trim();
+  const pin=document.getElementById("checkoutPin")?.value.trim();
+  const address=document.getElementById("checkoutAddress")?.value.trim();
+
+  if(!name || !phone || !pin || !address){
+    showToast("Please fill required delivery details");
+    return;
+  }
+  if(!cart.length){
+    showToast("Your cart is empty");
+    return;
+  }
+
+  const orderId="HD"+Date.now().toString().slice(-8);
+  const total=cart.reduce((sum,item)=>{
+    const p=PRODUCTS.find(x=>x.id===item.id);
+    return sum+(p.price*item.qty);
+  },0);
+
+  const order={
+    orderId,
+    customer:{name,phone,pin,address,email:document.getElementById("checkoutEmail")?.value.trim()||""},
+    items:cart,
+    total,
+    createdAt:new Date().toISOString()
+  };
+
+  const orders=JSON.parse(localStorage.getItem("hd_orders_v3")||"[]");
+  orders.push(order);
+  localStorage.setItem("hd_orders_v3",JSON.stringify(orders));
+
+  const box=document.querySelector("#checkoutModal .modal-box");
+  box.innerHTML=`
+    <div class="order-success">
+      <div class="order-success-icon">✓</div>
+      <div class="kicker">Order Confirmed</div>
+      <h2>Thank you, ${name}.</h2>
+      <p>Your order has been placed successfully. The order details are saved in this browser for this website sample.</p>
+      <div class="order-number">Order ID: ${orderId}</div><br>
+      <button type="button" class="btn btn-primary" onclick="finishOrder()">Continue Shopping →</button>
+    </div>`;
+
+  cart=[];
+  saveCart();
+  updateCart();
 }
+function finishOrder(){ closeCheckout(); location.href="shop.html"; }
 function showToast(msg){
   const t=document.getElementById("toast"); if(!t)return;
   t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2000);
